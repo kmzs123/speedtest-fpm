@@ -200,7 +200,8 @@ fi
 # Allow selection of Apache port for network_mode: host
 if [ "$WEBPORT" != "9000" ]; then
   if is_alpine; then
-    sed -i "s/^Listen 80\$/Listen $WEBPORT/g" /etc/apache2/httpd.conf
+    #sed -i "s/^Listen 80\$/Listen $WEBPORT/g" /etc/apache2/httpd.conf
+    echo "Skip to port modification"
   else
     #sed -i "s/^Listen 80\$/Listen $WEBPORT/g" /etc/apache2/ports.conf
     #sed -i "s/*:80>/*:$WEBPORT>/g" /etc/apache2/sites-available/000-default.conf
@@ -212,7 +213,9 @@ echo "Done, Starting PHP-FPM"
 
 # This runs php-fpm
 if is_alpine; then
-  exec httpd -DFOREGROUND
+  #exec httpd -DFOREGROUND
+  exec php-fpm
 else
+  #exec apache2-foreground
   exec php-fpm
 fi
