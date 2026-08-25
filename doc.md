@@ -1,7 +1,7 @@
 # LibreSpeed
 
 > by Federico Dossena
-> Version 6.1.0
+> Version 6.2.1
 > [https://github.com/librespeed/speedtest/](https://github.com/librespeed/speedtest/)
 
 ## Introduction
@@ -60,6 +60,29 @@ Let's install the speed test.
 
 Put all files on your web server via FTP or by copying them directly. You can install it in the root, or in a subdirectory.
 
+**Web server upload limit:** The upload test sends POST requests up to 20 MB (configurable with `xhr_ul_blob_megabytes`). Without proper configuration, the server will reject these with HTTP 413, causing wildly inaccurate upload speeds. Configure your web server to accept large request bodies:
+
+Nginx:
+```
+client_max_body_size 128m;
+```
+
+Apache:
+```
+LimitRequestBody 134217728
+```
+
+IIS: Add the following to `web.config` (value is in bytes):
+```xml
+<system.webServer>
+  <security>
+    <requestFiltering>
+      <requestLimits maxAllowedContentLength="134217728" />
+    </requestFiltering>
+  </security>
+</system.webServer>
+```
+
 __Important:__ The speed test needs write permissions in the installation folder!
 
 #### ipinfo.io
@@ -103,7 +126,7 @@ $PostgreSql_hostname="DB_HOSTNAME"; //database address, usually localhost
 $PostgreSql_databasename="DB_NAME"; //the name of the database where you loaded telemetry_postgresql.sql
 ```
 
-Ifyou chose to use MSSQL, you must set your database credentials:
+If you chose to use MSSQL, you must set your database credentials:
 
 ```php
 $MsSql_server = 'DB_HOSTNAME';
@@ -174,18 +197,20 @@ Requirements:
   * FreeType 2 and its PHP module
   * The PHP gd library
 
-To install the speed test frontend, copy the project files to your web server and keep the modern UI assets next to the HTML files:
+To install the speed test frontend, copy the project files to your web server, keeping the layout they have in the repository:
 
 * `index.html`
 * `index-classic.html`
 * `index-modern.html`
 * `design-switch.js`
 * `config.json`
+* `settings.json`
+* `server-list.json`
 * `speedtest.js`
 * `speedtest_worker.js`
 * `favicon.ico`
 * the `backend` folder
-* the contents of `frontend/`, copied so `styling/`, `javascript/`, `images/`, and `fonts/` sit next to the HTML files
+* the `frontend` folder, copied as a whole: the modern UI loads its assets from `frontend/`
 * Optionally, the `results` folder
 
 __Important:__ The speed test needs read and execute permissions in the installation folder where applicable!
@@ -468,7 +493,7 @@ __Advanced parameters:__ (Seriously, don't change these unless you know what you
 * __useMebibits__: use mebibits/s instead of megabits/s for the speeds
   * Default: `false`
 * __overheadCompensationFactor__: compensation for HTTP and network overhead. Default value assumes typical MTUs used over the Internet. You might want to change this if you're using this in your internal network with different MTUs, or if you're using IPv6 instead of IPv4.
-  * Default: `1.06` probably a decent estimate for all overhead. This was measured empirically by comparing the measured speed and the speed reported by my the network adapter.
+  * Default: `1.06` probably a decent estimate for all overhead. This was measured empirically by comparing the measured speed and the speed reported by my network adapter.
   * `1048576/925000`: old default value. This is probably too high.
   * `1.0513`: HTTP+TCP+IPv6+ETH, over the Internet (empirically tested, not calculated)
   * `1.0369`: Alternative value for HTTP+TCP+IPv4+ETH, over the Internet (empirically tested, not calculated)

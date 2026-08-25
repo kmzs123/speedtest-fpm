@@ -63,7 +63,7 @@ Here's a list of additional environment variables available in this mode:
 * __`SERVER_LIST_URL`__: When set, both frontend designs load their server list from this URL instead of the generated or mounted `server-list.json`. This is useful if you want the containerized frontend to consume a remote shared server list.
 * __`TELEMETRY`__: Whether to enable telemetry or not. If enabled, you maybe want your data to be persisted. See below. Default value: `false`
 * __`ENABLE_ID_OBFUSCATION`__: When set to true with telemetry enabled, test IDs are obfuscated, to avoid exposing the database internal sequential IDs. Default value: `false`
-* __`OBFUSCATION_SALT`__: The salt string that is used to obfuscate the test IDs. The format shoud be a 2 byte hex string (e.g. `0x1234abcd`). If not specified, a random one will be generated.
+* __`OBFUSCATION_SALT`__: The salt string that is used to obfuscate the test IDs. The format should be a 2 byte hex string (e.g. `0x1234abcd`). If not specified, a random one will be generated.
 * __`REDACT_IP_ADDRESSES`__: When set to true with telemetry enabled, IP addresses and hostnames are redacted from the collected telemetry, for better privacy. Default value: `false`
 * __`DB_TYPE`__: When set to one of the supported DB-Backends it will use this instead of the default sqlite database backend. TELEMETRY has to be set to `true`. Also you have to create the database as described in [doc.md](doc.md#creating-the-database). Supported backend types are:
   * sqlite - no additional settings required
@@ -165,7 +165,7 @@ docker run -e MODE=frontend -e SERVER_LIST_URL="https://example.com/custom-serve
 This command starts LibreSpeed in frontend mode, with a given `servers.json` file, and with telemetry, ID obfuscation, and a stats password and a persistant sqlite database for results:
 
 ```shell
-docker run -e MODE=frontend -e TELEMETRY=true -e ENABLE_ID_OBFUSCATION=true -e PASSWORD="yourPasswordHere" -v $PWD/servers.json:/servers.json -v $PWD/db-dir/:/database -p 80:80 -it ghcr.io/librespeed/speedtest
+docker run -e MODE=frontend -e TELEMETRY=true -e ENABLE_ID_OBFUSCATION=true -e PASSWORD="yourPasswordHere" -v $PWD/servers.json:/servers.json -v $PWD/db-dir/:/database -p 80:8080 -it ghcr.io/librespeed/speedtest
 ```
 
 ### Dual mode

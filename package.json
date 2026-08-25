@@ -1,6 +1,6 @@
 {
   "name": "librespeed-speedtest",
-  "version": "6.1.0",
+  "version": "6.2.1",
   "description": "LibreSpeed - A Free and Open Source speed test that you can host on your server(s)",
   "main": "speedtest.js",
   "scripts": {
@@ -50,6 +50,8 @@
     "stability.html",
     "index.html",
     "favicon.ico",
+    "manifest.webmanifest",
+    "images/",
     "backend/",
     "examples/",
     "results/"
