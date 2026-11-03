@@ -93,7 +93,7 @@ if [[ "$MODE" == "frontend" || "$MODE" == "dual" ||  "$MODE" == "standalone" ]];
     cp /servers.json /var/www/html/server-list.json
     # default the frontend list to the mounted file so the classic design uses it too
     SERVER_LIST_URL="${SERVER_LIST_URL:-server-list.json}"
- elif [ -n "$SERVER_LIST_URL" ]; then
+  elif [ -n "$SERVER_LIST_URL" ]; then
     echo "no /servers.json found, relying on SERVER_LIST_URL"
   elif [ "$MODE" == "frontend" ]; then
     echo "ERROR: /servers.json not found and SERVER_LIST_URL is not set" >&2
@@ -115,7 +115,7 @@ if [[ "$MODE" == "frontend" || "$MODE" == "dual" ||  "$MODE" == "standalone" ]];
   if [ -f /var/www/html/server-list.json ]; then
     cp /var/www/html/server-list.json /var/www/html/servers.json
   fi
-  
+
   # Replace title placeholders if TITLE is set
   if [ ! -z "$TITLE" ]; then
     TITLE_ONE_LINE=${TITLE//$'\r'/}
@@ -227,11 +227,8 @@ fi
 # Allow selection of Apache port for network_mode: host
 if [ "$WEBPORT" != "9000" ]; then
   if is_alpine; then
-    #sed -i "s/^Listen 80\$/Listen $WEBPORT/g" /etc/apache2/httpd.conf
-    echo "Skip to port modification"
+    echo "How do I change the PHP-FPM port in Alpine?"
   else
-    #sed -i "s/^Listen 80\$/Listen $WEBPORT/g" /etc/apache2/ports.conf
-    #sed -i "s/*:80>/*:$WEBPORT>/g" /etc/apache2/sites-available/000-default.conf
     sed -i "s|9000|$WEBPORT|g" /usr/local/etc/php-fpm.d/zz-docker.conf
   fi
 fi
@@ -240,9 +237,7 @@ echo "Done, Starting PHP-FPM"
 
 # This runs php-fpm
 if is_alpine; then
-  #exec httpd -DFOREGROUND
   exec php-fpm
 else
-  #exec apache2-foreground
   exec php-fpm
 fi
